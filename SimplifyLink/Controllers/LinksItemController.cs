@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Net;
 
 namespace SimplifyLink.Controllers
 {
@@ -19,30 +20,13 @@ namespace SimplifyLink.Controllers
         private readonly UserManager<IdentityUser> _userManager;
         private readonly DataManager _dataManager;
         private readonly IMapingService _mapper;
-        private static readonly string _projectId = "your-project-id";
-        //https://example.page.link/summer-sale
-        private static readonly string PackageName = "https://example.page.link/summer-sale"; // Замените на имя пакета вашего приложения Android
+        private readonly IShortUrlService _shorter;
         public LinksItemController(UserManager<IdentityUser> userManager, DataManager dataManager, MappingServiceNative mapper)
         {
             _userManager = userManager;
             _dataManager = dataManager;
             _mapper = mapper;
-        }
-
-        [HttpPost]
-        public string CreateDynamicLink(string url)
-        {
-
-
-
-            var dynamicLink = new DynamicLink(link, PackageName)
-            {
-                AndroidInfo = _projectId,
-            };
-
-            var shortLink = dynamicLink.GetShortLinkAsync().Result;
-
-            return shortLink.ToString();
+            _shorter = new ShortUrlServiceNative();
         }
 
 
@@ -52,6 +36,7 @@ namespace SimplifyLink.Controllers
             var userId = Guid.Parse(_userManager.GetUserId(User));
             IQueryable<LinkModel> Links = _dataManager.LinkRepository.GetLinks(userId);
             IQueryable<LinkViewModel> LinksView = _mapper.GetLinkViews(Links);//_mapper.Map<LinkViewModel>(Links); 
+            List<LinkViewModel> mass = LinksView.ToList();
             return View(LinksView);
 
         }
@@ -61,12 +46,29 @@ namespace SimplifyLink.Controllers
             return View(LinksView);
         }
         [HttpPost]
-        public IActionResult AddLink (IFormCollection form)
+        public async Task<IActionResult> AddLink (IFormCollection form)
         {
             var userId = Guid.Parse(_userManager.GetUserId(User));
-            string df = form["message"];
-            var aaf = CreateDynamicLink(df);
+            string longurl = form["message"];
+             string result = "";
+            await _shorter.GetShortUrl( (url) =>
+            {
+                _dataManager.LinkRepository.AddLink(userId, longurl, url);
+                 RedirectToAction("Index");
+            }, longurl);
+            //var aaf = CreateDynamicLink(df);
             //_dataManager.LinkRepository.AddLink(userId, link.Url, link.MinUrl);
+            return RedirectToAction("Index");
+
+        }
+        [HttpPost]
+        public async Task<IActionResult> UpTiсket (IFormCollection form)
+        {
+            Guid id = Guid.Parse(form["IdLink"]);
+            var userId = Guid.Parse(_userManager.GetUserId(User));
+            if(id!=null)
+                await _dataManager.LinkRepository.UpTicket(id);
+
             return RedirectToAction("Index");
 
         }

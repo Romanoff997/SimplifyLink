@@ -7,6 +7,7 @@ namespace SimplifyLink.Domain.Repositories.Abstract
     public interface ILinkModelRepository
     {
         IQueryable<LinkModel> GetLinks (Guid UserId);
-        void AddLink(Guid userId, string link, string miniLink);
+        Task AddLink(Guid userId, string link, string miniLink);
+        Task UpTicket(Guid urlId);
     }
 }

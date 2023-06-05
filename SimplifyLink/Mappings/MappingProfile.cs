@@ -8,7 +8,6 @@ namespace SimplifyLink.Mappings
     {
         public MappingProfile()
         {
-            //CreateMap <IQueryable<LinkViewModel>, IQueryable<LinkModel> >();
             CreateMap <LinkModel, LinkViewModel>();
         }
     }
