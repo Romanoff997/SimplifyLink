@@ -1,0 +1,42 @@
+﻿@model LinkViewModel
+@{
+    string strTitle = "Add link";
+    ViewBag.Title = strTitle;
+}
+
+    <h2>@strTitle</h2>
+    <div>
+       
+        <div class="row">
+            <div class="col-md-10">
+                <input type="text" name="message" id="message" class="form-control" placeholder="Type your message here">
+            </div>
+            <div class="col-md-2">
+                <button type="button" id="sendButton" class="btn btn-primary btn-block">Send</button>
+            </div>
+        </div>
+    </div>
+    <div id="userJsonText">
+        @*@Html.DisplayFor(model=>model.Json)*@
+    </div>
+    @*    <script src="https://apis.google.com/js/client.js"> </script>
+    @section Scripts{
+    const apiKey = 'YOUR_API_KEY';
+    const shortUrl = 'https://goo.gl/abcd1234';
+    const apiUrl = https://www.googleapis.com/urlshortener/v1/url?shortUrl=${shortUrl}&key=${apiKey};
+    <script type="text/javascript">
+    $('#userJson').input(function () {
+
+
+    fetch(apiUrl)
+    .then(response => response.json())
+    .then(data => {
+    const longUrl = data.longUrl;
+    console.log(longUrl);
+    // Далее вы можете использовать переменную longUrl для своих нужд
+    })
+    .catch(error => console.error(error));
+
+
+    });</script>
+    }*@
