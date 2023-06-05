@@ -17,7 +17,6 @@ namespace SimplifyLink.Services
         
         public async Task GetShortUrl(Action<string> GetUrl, string longUrl)
         {
-            //string longUrl = "http://www.example.com/very_long_url";
             string apiUrl = "http://tinyurl.com/api-create.php?url=" + longUrl;
 
             string shortUrl = "";
@@ -27,8 +26,5 @@ namespace SimplifyLink.Services
             }
             GetUrl?.Invoke(shortUrl);
         }
-
-        // Получение сокращенной ссылки
-        
-        }
+    }
 }

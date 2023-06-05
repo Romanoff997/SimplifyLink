@@ -15,7 +15,7 @@ namespace SimplifyLink.Services
 
         }
 
-        public IQueryable<LinkViewModel> GetLinkViews(IQueryable<LinkModel> Links)
+        public  IQueryable<LinkViewModel> GetLinkViews(IQueryable<LinkModel> Links)
         {
             return Links.ProjectTo<LinkViewModel>(_mapper.ConfigurationProvider);
         }

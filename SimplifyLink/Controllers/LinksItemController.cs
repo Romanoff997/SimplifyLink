@@ -31,11 +31,11 @@ namespace SimplifyLink.Controllers
 
 
         [HttpGet]
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
             var userId = Guid.Parse(_userManager.GetUserId(User));
-            IQueryable<LinkModel> Links = _dataManager.LinkRepository.GetLinks(userId);
-            IQueryable<LinkViewModel> LinksView = _mapper.GetLinkViews(Links);//_mapper.Map<LinkViewModel>(Links); 
+            IEnumerable<LinkModel> Links = await _dataManager.LinkRepository.GetLinksAsync(userId);
+            IQueryable<LinkViewModel> LinksView = _mapper.GetLinkViews(Links.AsQueryable());//_mapper.Map<LinkViewModel>(Links); 
             List<LinkViewModel> mass = LinksView.ToList();
             return View(LinksView);
 
@@ -53,21 +53,22 @@ namespace SimplifyLink.Controllers
              string result = "";
             await _shorter.GetShortUrl( (url) =>
             {
-                _dataManager.LinkRepository.AddLink(userId, longurl, url);
-                 RedirectToAction("Index");
+                 _dataManager.LinkRepository.AddLinkAsync(userId, longurl, url);
+                 //RedirectToAction("Index");
             }, longurl);
             //var aaf = CreateDynamicLink(df);
             //_dataManager.LinkRepository.AddLink(userId, link.Url, link.MinUrl);
             return RedirectToAction("Index");
 
         }
+
         [HttpPost]
         public async Task<IActionResult> UpTiсket (IFormCollection form)
         {
             Guid id = Guid.Parse(form["IdLink"]);
             var userId = Guid.Parse(_userManager.GetUserId(User));
             if(id!=null)
-                await _dataManager.LinkRepository.UpTicket(id);
+                await _dataManager.LinkRepository.UpTicketAsync(id);
 
             return RedirectToAction("Index");
 

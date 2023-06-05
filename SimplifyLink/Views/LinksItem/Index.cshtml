@@ -12,7 +12,7 @@
             @*<a asp-action="AddLinkForm">Add Link</a>*@
 
 
-            <form method="post" action="AddLink">
+            <form asp-controller="LinksItem" method="post" asp-action="AddLink">
                 <div class="row">
                     <div class="col-md-10">
                         <input type="text" name="message" class="form-control" placeholder="">
@@ -79,7 +79,6 @@
     <script>
         function openlink(myhref){
             window.open(myhref, '_blank')
-
         }
     </script>
     
